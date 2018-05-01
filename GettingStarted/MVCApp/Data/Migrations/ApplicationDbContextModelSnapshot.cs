@@ -174,6 +174,17 @@ namespace MVCApp.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("MVCApp.Models.Category", b =>
+            {
+                b.Property<string>("Id");
+
+                b.Property<string>("Name");                
+
+                b.HasKey("Id");
+
+                b.ToTable("Category");
+            });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
