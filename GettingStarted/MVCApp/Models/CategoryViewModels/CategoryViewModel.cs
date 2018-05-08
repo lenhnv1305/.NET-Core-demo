@@ -8,7 +8,11 @@ namespace MVCApp.Models.CategoryViewModels
 {
     public class CategoryViewModel
     {
+        [Display(Name = "Name")]
         [Required]
         public string Name { get; set; }
+        [Display(Name = "Description")]
+        [Required]
+        public string Description { get; set; }
     }
 }

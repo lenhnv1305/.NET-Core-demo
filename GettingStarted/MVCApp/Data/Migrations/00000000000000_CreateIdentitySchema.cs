@@ -65,15 +65,16 @@ namespace MVCApp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<string>(maxLength: 256, nullable: false),
-                    Name = table.Column<string>(maxLength: 1024, nullable: false)
+                    Name = table.Column<string>(maxLength: 1024, nullable: false),
+                    Description = table.Column<string>(maxLength: 4000, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -228,7 +229,7 @@ namespace MVCApp.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Categories");
         }
     }
 }

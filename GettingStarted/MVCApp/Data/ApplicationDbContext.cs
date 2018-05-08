@@ -23,6 +23,6 @@ namespace MVCApp.Data
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
-        public DbSet<Category> Category { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }

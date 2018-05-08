@@ -178,11 +178,13 @@ namespace MVCApp.Data.Migrations
             {
                 b.Property<string>("Id");
 
-                b.Property<string>("Name");                
+                b.Property<string>("Name");
+
+                b.Property<string>("Description");
 
                 b.HasKey("Id");
 
-                b.ToTable("Category");
+                b.ToTable("Categories");
             });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

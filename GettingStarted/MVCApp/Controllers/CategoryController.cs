@@ -19,7 +19,7 @@ namespace MVCApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View("Category", new CategoryViewModel());
+            return View("Create", new CategoryViewModel());
         }
 
         [HttpPost]
@@ -31,11 +31,22 @@ namespace MVCApp.Controllers
                 repoCategory.Create(new Category()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Name = model.Name
+                    Name = model.Name,
+                    Description = model.Description
                 });
             }
 
-            return Content("Successfully");
+            return RedirectToAction("GetCategories");
+        }
+
+        [HttpGet]
+        public IActionResult GetCategories()
+        {
+            var repoCategory = new Services.GenericRepository<Category>(_context);
+            return View("Category", repoCategory.Gets().AsQueryable().Select(c => new CategoryViewModel {
+                Name = c.Name,
+                Description = c.Description
+            }).ToList());
         }
     }
 }
