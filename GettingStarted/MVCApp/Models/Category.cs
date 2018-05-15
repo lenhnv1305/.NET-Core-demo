@@ -15,5 +15,6 @@ namespace MVCApp.Models
         public string Name { get; set; }
         [StringLength(4000)]
         public string Description { get; set; }
+        public IEnumerable<Post> Posts { get; set; }
     }
 }

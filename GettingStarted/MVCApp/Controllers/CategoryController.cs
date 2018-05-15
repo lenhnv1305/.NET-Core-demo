@@ -19,7 +19,7 @@ namespace MVCApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View("Create", new CategoryViewModel());
+            return View("Modify");
         }
 
         [HttpPost]

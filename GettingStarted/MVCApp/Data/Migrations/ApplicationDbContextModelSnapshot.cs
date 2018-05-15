@@ -187,6 +187,37 @@ namespace MVCApp.Data.Migrations
                 b.ToTable("Categories");
             });
 
+            modelBuilder.Entity("MVCApp.Models.Post", b =>
+            {
+                b.Property<string>("Id");
+
+                b.Property<string>("CategoryId");
+
+                b.Property<string>("Title");
+
+                b.Property<string>("ShortDescription");
+
+                b.Property<string>("Content");
+
+                b.Property<string>("ThumbnailImage");
+
+                b.Property<DateTime>("CreatedDate");
+
+                b.Property<DateTime>("UpdatedDate");
+
+                b.HasKey("Id");
+
+                b.ToTable("Posts");
+            });
+
+            modelBuilder.Entity("MVCApp.Models.Category<string>", b =>
+            {
+                b.HasOne("MVCApp.Models.Category")
+                    .WithMany("Posts")
+                    .HasForeignKey("CategoryId")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
