@@ -210,9 +210,9 @@ namespace MVCApp.Data.Migrations
                 b.ToTable("Posts");
             });
 
-            modelBuilder.Entity("MVCApp.Models.Category<string>", b =>
+            modelBuilder.Entity("MVCApp.Models.Post<string>", b =>
             {
-                b.HasOne("MVCApp.Models.Category")
+                b.HasOne("MVCApp.Models.Post")
                     .WithMany("Posts")
                     .HasForeignKey("CategoryId")
                     .OnDelete(DeleteBehavior.Cascade);

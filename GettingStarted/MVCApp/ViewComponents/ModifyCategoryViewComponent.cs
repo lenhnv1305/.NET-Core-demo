@@ -25,7 +25,7 @@ namespace MVCApp.ViewComponents
                 categoryViewModel.Name = category.Name;
                 categoryViewModel.Description = category.Description;
             }
-            ViewBag.IsEditMode = string.IsNullOrEmpty(id);
+            ViewBag.IsEditMode = !string.IsNullOrEmpty(id);
             return View(categoryViewModel);
         }
     }

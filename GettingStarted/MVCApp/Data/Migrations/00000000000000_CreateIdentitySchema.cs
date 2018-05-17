@@ -78,6 +78,30 @@ namespace MVCApp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Posts",
+                columns: table => new
+                {
+                    Id = table.Column<string>(maxLength: 256, nullable: false),
+                    CategoryId = table.Column<string>(maxLength: 256, nullable: false),
+                    Title = table.Column<string>(maxLength: 1024, nullable: false),
+                    ShortDescription = table.Column<string>(maxLength: 1024, nullable: false),
+                    Content = table.Column<string>(maxLength: 4000, nullable: false),
+                    ThumbnailImage = table.Column<string>(maxLength: 256, nullable: false),
+                    CreatedDate = table.Column<DateTime>(maxLength: 256, nullable: false),
+                    UpdatedDate = table.Column<DateTime>(maxLength: 256, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Posts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Posts_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
