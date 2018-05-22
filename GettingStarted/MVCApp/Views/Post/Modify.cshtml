@@ -1,5 +1,6 @@
 ﻿@model MVCApp.Models.PostViewModels.PostViewModel
 @{
+    var isEditMode = !string.IsNullOrEmpty(Model.Id);
     ViewData["Title"] = "Post";
 }
 
@@ -8,9 +9,15 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-            <h4>New post</h4>
+            <h4>@(isEditMode ? "Update" : "New") post</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
+            @if (isEditMode)
+            {
+                <div class="form-group" hidden>
+                    <input asp-for="Id" class="form-control" />
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="CategoryId"></label>
                 <input asp-for="CategoryId" class="form-control" />
@@ -36,7 +43,7 @@
                 <input asp-for="ThumbnailImage" class="form-control" />
                 <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-default">Create</button>
+            <button type="submit" class="btn btn-default">@(isEditMode ? "Update" : "Create")</button>
         </form>
     </div>
 </div>

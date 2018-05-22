@@ -20,8 +20,9 @@ namespace MVCApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            var repoCategory = new Services.GenericRepository<Category>(_context);
             return View("Modify", new PostViewModel() {
-                CatedoryId = "21bc0e8b-8aba-40a5-ac3d-7827913cb520"
+                CategoryId = repoCategory.Gets().FirstOrDefault()?.Id
             });
         }
 
@@ -30,8 +31,8 @@ namespace MVCApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var repoCategory = new Services.GenericRepository<Post>(_context);
-                repoCategory.Create(new Post()
+                var repoPost = new Services.GenericRepository<Post>(_context);
+                repoPost.Create(new Post()
                 {
                     Id = Guid.NewGuid().ToString(),
                     CategoryId = model.CategoryId,
@@ -46,13 +47,67 @@ namespace MVCApp.Controllers
 
             return RedirectToAction("GetPosts");
         }
+        [HttpGet]
+        public IActionResult Update(string id = "")
+        {
+            var repoCategory = new Services.GenericRepository<Post>(_context);
+            var postViewModel = new PostViewModel();
+            var post = repoCategory.GetById(id);
+            if (post != null)
+            {
+                postViewModel.Id = post.Id;
+                postViewModel.CategoryId = post.CategoryId;
+                postViewModel.ShortDescription = post.ShortDescription;
+                postViewModel.Title = post.Title;
+                postViewModel.CategoryId = post.CategoryId;
+                postViewModel.Content = post.Content;
+                postViewModel.ThumbnailImage = post.ThumbnailImage;
+            }
+            return View("Modify", postViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Update(PostViewModel model, string returnUrl = null)
+        {
+            if (ModelState.IsValid)
+            {
+                var repoCategory = new Services.GenericRepository<Post>(_context);
+                var post = repoCategory.GetById(model.Id);
+                if (post != null)
+                {
+                    post.CategoryId = model.CategoryId;
+                    post.Title = model.Title;
+                    post.ShortDescription = model.ShortDescription;
+                    post.Content = model.Content;
+                    post.ThumbnailImage = model.ThumbnailImage;
+                    post.UpdatedDate = DateTime.UtcNow;
+                }
+                repoCategory.Update(post);
+            }
+
+            return RedirectToAction("GetPosts");
+        }
+        [HttpGet]
+        public IActionResult Delete(string id = "")
+        {
+            var repoPost = new Services.GenericRepository<Post>(_context);
+            var post = repoPost.GetById(id);
+            if (post != null)
+            {
+                repoPost.Delete(post);
+            }
+
+            return RedirectToAction("GetPosts");
+        }
 
         [HttpGet]
         public IActionResult GetPosts()
         {
-            var repoCategory = new Services.GenericRepository<Post>(_context);
-            return View("Post", repoCategory.Gets().AsQueryable().Select(c => new PostViewModel
+            var repoPost = new Services.GenericRepository<Post>(_context);
+            return View("Post", repoPost.Gets().AsQueryable().Select(c => new PostViewModel
             {
+                Id = c.Id,
+                CategoryId = c.CategoryId,
                 Title = c.Title,
                 ShortDescription = c.ShortDescription,
                 Content = c.Content,

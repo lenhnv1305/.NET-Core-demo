@@ -38,12 +38,49 @@ namespace MVCApp.Controllers
 
             return RedirectToAction("GetCategories");
         }
+        [HttpGet]
+        public IActionResult Update(string categoryId = "")
+        {
+            return View("Modify", categoryId);
+        }
+
+        [HttpPost]
+        public IActionResult Update(CategoryViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var repoCategory = new Services.GenericRepository<Category>(_context);
+                var category = repoCategory.GetById(model.CategoryId);
+                if (category != null)
+                {
+                    category.Name = model.Name;
+                    category.Description = model.Description;
+                    repoCategory.Update(category);
+                }                
+            }
+
+            return RedirectToAction("GetCategories");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(string categoryId = "")
+        {            
+            var repoCategory = new Services.GenericRepository<Category>(_context);
+            var category = repoCategory.GetById(categoryId);
+            if (category != null)
+            {
+                repoCategory.Delete(category);
+            }
+
+            return RedirectToAction("GetCategories");
+        }
 
         [HttpGet]
         public IActionResult GetCategories()
         {
             var repoCategory = new Services.GenericRepository<Category>(_context);
             return View("Category", repoCategory.Gets().AsQueryable().Select(c => new CategoryViewModel {
+                CategoryId = c.Id,
                 Name = c.Name,
                 Description = c.Description
             }).ToList());

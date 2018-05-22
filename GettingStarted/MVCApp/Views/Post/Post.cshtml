@@ -14,6 +14,7 @@
                     <th>Short Description</th>
                     <th>Content</th>
                     <th>Thumbnail Image</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -24,6 +25,10 @@
                         <td>@item.ShortDescription</td>
                         <td>@item.Content</td>
                         <td>@item.ThumbnailImage</td>
+                        <td>
+                            <a href="@Url.Action("Update", new { id = item.Id })">Update</a>
+                            <a href="@Url.Action("Delete", new { id = item.Id })">Delete</a>
+                        </td>
                     </tr>
                 }
             </tbody>
