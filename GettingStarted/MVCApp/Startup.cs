@@ -35,6 +35,10 @@ namespace MVCApp
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IPostService, PostService>();
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IGenericRepository<Post>, GenericRepository<Post>>();
+            services.AddTransient<IGenericRepository<Category>, GenericRepository<Category>>();
 
             services.AddMvc();
         }

@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MVCApp.Models;
 using MVCApp.Models.CategoryViewModels;
+using MVCApp.Services;
 
 namespace MVCApp.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly Data.ApplicationDbContext _context;
-        public CategoryController(Data.ApplicationDbContext context)
+        private readonly ICategoryService _categoryService;
+        public CategoryController(ICategoryService categoryService)
         {
-            _context = context;
+            this._categoryService = categoryService;
         }
 
         [HttpGet]
@@ -27,8 +28,7 @@ namespace MVCApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var repoCategory = new Services.GenericRepository<Category>(_context);
-                repoCategory.Create(new Category()
+                _categoryService.Create(new Category()
                 {
                     Id = Guid.NewGuid().ToString(),
                     Name = model.Name,
@@ -49,13 +49,12 @@ namespace MVCApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var repoCategory = new Services.GenericRepository<Category>(_context);
-                var category = repoCategory.GetById(model.CategoryId);
+                var category = _categoryService.GetById(model.CategoryId);
                 if (category != null)
                 {
                     category.Name = model.Name;
                     category.Description = model.Description;
-                    repoCategory.Update(category);
+                    _categoryService.Update(category);
                 }                
             }
 
@@ -65,11 +64,10 @@ namespace MVCApp.Controllers
         [HttpGet]
         public IActionResult Delete(string categoryId = "")
         {            
-            var repoCategory = new Services.GenericRepository<Category>(_context);
-            var category = repoCategory.GetById(categoryId);
+            var category = _categoryService.GetById(categoryId);
             if (category != null)
             {
-                repoCategory.Delete(category);
+                _categoryService.Delete(category);
             }
 
             return RedirectToAction("GetCategories");
@@ -78,8 +76,7 @@ namespace MVCApp.Controllers
         [HttpGet]
         public IActionResult GetCategories()
         {
-            var repoCategory = new Services.GenericRepository<Category>(_context);
-            return View("Category", repoCategory.Gets().AsQueryable().Select(c => new CategoryViewModel {
+            return View("Category", _categoryService.Gets().AsQueryable().Select(c => new CategoryViewModel {
                 CategoryId = c.Id,
                 Name = c.Name,
                 Description = c.Description
