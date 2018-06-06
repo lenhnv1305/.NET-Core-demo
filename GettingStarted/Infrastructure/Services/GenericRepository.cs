@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using MVCApp.Data;
+using Core.Interfaces;
+using Infrastructure.Data;
 
-namespace MVCApp.Services
+namespace Infrastructure.Services
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {

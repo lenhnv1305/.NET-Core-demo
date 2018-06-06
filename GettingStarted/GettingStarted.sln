@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GettingStarted", "GettingSt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MVCApp", "MVCApp\MVCApp.csproj", "{2EF5F4F3-74F9-4D82-B572-63059D0E5A29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{409E4D66-A021-409F-BCCE-FF6F90902473}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{142055BB-5948-4730-B1A6-1B289DE7478D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{2EF5F4F3-74F9-4D82-B572-63059D0E5A29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EF5F4F3-74F9-4D82-B572-63059D0E5A29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EF5F4F3-74F9-4D82-B572-63059D0E5A29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{409E4D66-A021-409F-BCCE-FF6F90902473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{409E4D66-A021-409F-BCCE-FF6F90902473}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{409E4D66-A021-409F-BCCE-FF6F90902473}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{409E4D66-A021-409F-BCCE-FF6F90902473}.Release|Any CPU.Build.0 = Release|Any CPU
+		{142055BB-5948-4730-B1A6-1B289DE7478D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{142055BB-5948-4730-B1A6-1B289DE7478D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{142055BB-5948-4730-B1A6-1B289DE7478D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{142055BB-5948-4730-B1A6-1B289DE7478D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

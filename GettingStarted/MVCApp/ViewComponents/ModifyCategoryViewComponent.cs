@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MVCApp.Data;
-using MVCApp.Models;
+﻿using Core.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using MVCApp.Models.CategoryViewModels;
 using System;
 using System.Collections.Generic;
@@ -11,14 +10,14 @@ namespace MVCApp.ViewComponents
 {
     public class ModifyCategoryViewComponent : ViewComponent
     {
-        private readonly ApplicationDbContext _context;
-        public ModifyCategoryViewComponent(ApplicationDbContext context)
+        private readonly ICategoryService _categoryService;
+        public ModifyCategoryViewComponent(ICategoryService categoryService)
         {
-            this._context = context;
+            this._categoryService = categoryService;
         }
         public IViewComponentResult Invoke(string id = "")
         {
-            var category = new Services.GenericRepository<Category>(_context).GetById(id);
+            var category = _categoryService.GetById(id);
             var categoryViewModel = new CategoryViewModel();
             if (category != null)
             {                

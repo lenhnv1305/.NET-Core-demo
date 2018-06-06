@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Core.Interfaces;
 using MVCApp.Services;
 
 namespace MVCApp.Services

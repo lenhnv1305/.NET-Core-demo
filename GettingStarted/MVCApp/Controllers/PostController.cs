@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.DTOs;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using MVCApp.Models;
 using MVCApp.Models.PostViewModels;
-using MVCApp.Services;
 
 namespace MVCApp.Controllers
 {
@@ -13,16 +13,18 @@ namespace MVCApp.Controllers
     public class PostController : Controller
     {
         private readonly IPostService _postService;
-        public PostController(IPostService postService)
+        private readonly ICategoryService _categoryService;
+        public PostController(IPostService postService, ICategoryService categoryService)
         {
             _postService = postService;
+            _categoryService = categoryService;
         }
 
         [HttpGet]
         public IActionResult Create()
         {
             return View("Modify", new PostViewModel() {
-                CategoryId = _postService.Gets().FirstOrDefault()?.Id
+                CategoryId = _categoryService.Gets().FirstOrDefault()?.Id
             });
         }
 
@@ -31,7 +33,7 @@ namespace MVCApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _postService.Create(new Post()
+                _postService.Create(new PostDto()
                 {
                     Id = Guid.NewGuid().ToString(),
                     CategoryId = model.CategoryId,
@@ -87,19 +89,14 @@ namespace MVCApp.Controllers
         [HttpGet]
         public IActionResult Delete(string id = "")
         {
-            var post = _postService.GetById(id);
-            if (post != null)
-            {
-                _postService.Delete(post);
-            }
-
+            _postService.Delete(id);
             return RedirectToAction("GetPosts");
         }
 
         [HttpGet]
         public IActionResult GetPosts()
         {
-            return View("Post", _postService.Gets().AsQueryable().Select(c => new PostViewModel
+            return View("Post", _postService.Gets().Select(c => new PostViewModel
             {
                 Id = c.Id,
                 CategoryId = c.CategoryId,
@@ -107,7 +104,7 @@ namespace MVCApp.Controllers
                 ShortDescription = c.ShortDescription,
                 Content = c.Content,
                 ThumbnailImage = c.ThumbnailImage
-            }).ToList());
+            }));
         }
     }
 }

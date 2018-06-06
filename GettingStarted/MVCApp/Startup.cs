@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MVCApp.Data;
-using MVCApp.Models;
-using MVCApp.Services;
+using Infrastructure.Models;
+using Core.Interfaces;
+using Infrastructure.Data;
+using Infrastructure.Services;
+using Infrastructure.Models;
 
 namespace MVCApp
 {

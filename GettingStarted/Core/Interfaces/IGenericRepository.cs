@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MVCApp.Services
+namespace Core.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {

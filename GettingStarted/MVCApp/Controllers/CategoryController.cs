@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using MVCApp.Models;
 using MVCApp.Models.CategoryViewModels;
-using MVCApp.Services;
 
 namespace MVCApp.Controllers
 {
@@ -28,9 +27,8 @@ namespace MVCApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _categoryService.Create(new Category()
+                _categoryService.Create(new Core.DTOs.CategoryDto
                 {
-                    Id = Guid.NewGuid().ToString(),
                     Name = model.Name,
                     Description = model.Description
                 });
@@ -49,34 +47,26 @@ namespace MVCApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var category = _categoryService.GetById(model.CategoryId);
-                if (category != null)
+                _categoryService.Update(new Core.DTOs.CategoryDto
                 {
-                    category.Name = model.Name;
-                    category.Description = model.Description;
-                    _categoryService.Update(category);
-                }                
+                    Name = model.Name,
+                    Description = model.Description
+                });           
             }
-
             return RedirectToAction("GetCategories");
         }
 
         [HttpGet]
         public IActionResult Delete(string categoryId = "")
         {            
-            var category = _categoryService.GetById(categoryId);
-            if (category != null)
-            {
-                _categoryService.Delete(category);
-            }
-
+            _categoryService.Delete(categoryId);
             return RedirectToAction("GetCategories");
         }
 
         [HttpGet]
         public IActionResult GetCategories()
         {
-            return View("Category", _categoryService.Gets().AsQueryable().Select(c => new CategoryViewModel {
+            return View("Category", _categoryService.Gets().Select(c => new CategoryViewModel {
                 CategoryId = c.Id,
                 Name = c.Name,
                 Description = c.Description
