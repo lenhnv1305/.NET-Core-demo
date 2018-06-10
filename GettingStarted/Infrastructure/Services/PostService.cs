@@ -23,7 +23,7 @@ namespace Infrastructure.Services
             {
                 Id = Guid.NewGuid().ToString(),
                 CategoryId = entity.CategoryId,
-                Title = entity.Content,
+                Title = entity.Title,
                 ShortDescription = entity.ShortDescription,
                 Content = entity.Content,
                 ThumbnailImage = entity.ThumbnailImage,

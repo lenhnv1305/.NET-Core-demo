@@ -1,4 +1,5 @@
 ﻿using Core.DTOs;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace Core.Interfaces
         void Create(CategoryDto entity);
         void Update(CategoryDto entity);
         void Delete(string id);
+        List<SelectListItem> CategoriesSelectList(string id = "");
     }
 }

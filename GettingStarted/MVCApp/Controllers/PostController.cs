@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Core.DTOs;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MVCApp.Models.PostViewModels;
 
 namespace MVCApp.Controllers
@@ -23,8 +24,9 @@ namespace MVCApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+
             return View("Modify", new PostViewModel() {
-                CategoryId = _categoryService.Gets().FirstOrDefault()?.Id
+                Categories = _categoryService.CategoriesSelectList()
             });
         }
 
@@ -37,7 +39,7 @@ namespace MVCApp.Controllers
                 {
                     Id = Guid.NewGuid().ToString(),
                     CategoryId = model.CategoryId,
-                    Title = model.Content,
+                    Title = model.Title,
                     ShortDescription = model.ShortDescription,
                     Content = model.Content,
                     ThumbnailImage = model.ThumbnailImage,
@@ -62,6 +64,7 @@ namespace MVCApp.Controllers
                 postViewModel.CategoryId = post.CategoryId;
                 postViewModel.Content = post.Content;
                 postViewModel.ThumbnailImage = post.ThumbnailImage;
+                postViewModel.Categories = _categoryService.CategoriesSelectList(id);
             }
             return View("Modify", postViewModel);
         }

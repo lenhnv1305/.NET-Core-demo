@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Core.Interfaces;
 using Core.DTOs;
 using Infrastructure.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Infrastructure.Services
 {
@@ -70,6 +71,22 @@ namespace Infrastructure.Services
                 category.Description = entity.Description;
                 this._repo.Update(category);
             }
+        }
+        public List<SelectListItem> CategoriesSelectList(string id = "")
+        {
+            var categories = this._repo.Gets();
+            var categorySelectList = new List<SelectListItem>();
+            if (categories != null)
+            {
+                foreach (var item in categories)
+                    categorySelectList.Add(new SelectListItem
+                    {
+                        Value = item.Id,
+                        Text = item.Name,
+                        Selected = item.Id.ToLower() == id.ToLower()
+                    });
+            }
+            return categorySelectList;
         }
     }
 }
