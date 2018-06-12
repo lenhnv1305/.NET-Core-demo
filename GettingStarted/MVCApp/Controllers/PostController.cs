@@ -24,7 +24,6 @@ namespace MVCApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-
             return View("Modify", new PostViewModel() {
                 Categories = _categoryService.CategoriesSelectList()
             });

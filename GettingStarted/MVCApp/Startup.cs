@@ -12,7 +12,6 @@ using Infrastructure.Models;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Services;
-using Infrastructure.Models;
 
 namespace MVCApp
 {
@@ -41,6 +40,7 @@ namespace MVCApp
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IGenericRepository<Post>, GenericRepository<Post>>();
             services.AddTransient<IGenericRepository<Category>, GenericRepository<Category>>();
+            services.AddTransient<IHomePageService, HomePageService>();
 
             services.AddMvc();
         }

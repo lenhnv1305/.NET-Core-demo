@@ -1,7 +1,6 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Infrastructure.Models;
-using Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
