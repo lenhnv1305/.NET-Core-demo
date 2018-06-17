@@ -35,7 +35,7 @@ namespace MVCApp.Controllers
                     Content = p.Content,
                     CreatedDate = p.CreatedDate,
                     ShortDescription = p.ShortDescription,
-                    ThumbnailImage = p.ThumbnailImage,
+                    ThumbnailImage = null,
                     Title = p.Title,
                     UpdatedDate = p.UpdatedDate
                 }).ToList()

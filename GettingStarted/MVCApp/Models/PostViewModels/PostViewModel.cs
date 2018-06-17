@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Core.Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -31,5 +32,16 @@ namespace MVCApp.Models.PostViewModels
         public string ThumbnailImage { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
+        public string ImageId
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.ThumbnailImage))
+                {
+                    return "";
+                }
+                return this.ThumbnailImage.Split("__")[1];
+            }
+        }
     }
 }
