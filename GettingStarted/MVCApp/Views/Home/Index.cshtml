@@ -5,20 +5,22 @@
 
 <div id="main-body"class="row">
     <div class="col-md-3 left-panel">
-        <span class="category"> Categories </span>
-        <ul>
+        <div class="list-group">
+            <a href="#" class="list-group-item active">
+                Categories
+            </a>
             @foreach (var item in Model.Categories)
             {
-                <li><a href="@Url.Action("Index", new { categoryId = item.CategoryId})">@item.Name</a></li>
+                <a href="@Url.Action("Index", new { categoryId = item.CategoryId})" class="list-group-item">@item.Name</a>
             }
-        </ul>
+        </div>
     </div>
     <div class="col-md-9 post-content">
         @foreach (var item in Model.Posts)
         { 
         <div class="row block-post">
             <div class="post-header">
-                <img src="cdn/image/image?id=@item.ImageId" alt="No image"/>
+                <img src="@Url.Action("Image","Post", new { id = item.ImageId})" alt="No image"/>
             </div>
             <div class="post-body">
                 <div>

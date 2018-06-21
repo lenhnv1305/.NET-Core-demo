@@ -7,6 +7,6 @@ namespace Core.Interfaces
 {
     public interface IHomePageService
     {
-        IEnumerable<PostDto> FilterPostByCategoryId(string categoryId);
+        IEnumerable<PostDto> FilterPostByCategoryId(string categoryId, bool isBloger, string ownerId);
     }
 }

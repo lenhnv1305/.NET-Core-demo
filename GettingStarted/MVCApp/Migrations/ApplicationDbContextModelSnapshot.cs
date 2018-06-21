@@ -123,6 +123,9 @@ namespace MVCApp.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(256);
+
                     b.Property<string>("ShortDescription")
                         .HasMaxLength(4000);
 

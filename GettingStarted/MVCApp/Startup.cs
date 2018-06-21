@@ -12,17 +12,23 @@ using Infrastructure.Models;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using MVCApp.Authorization;
 
 namespace MVCApp
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -44,7 +50,22 @@ namespace MVCApp
             services.AddTransient<IHomePageService, HomePageService>();
             services.AddTransient<IBlogImageService, BlogImageService>();
 
-            services.AddMvc();
+            services.AddMvc(config => {
+                var policy = new AuthorizationPolicyBuilder()
+                         .RequireAuthenticatedUser()
+                         .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
+
+            var skipHTTPS = Configuration.GetValue<bool>("LocalTest:skipHTTPS");
+            services.Configure<MvcOptions>(options =>
+            {
+                if (Environment.IsDevelopment() && !skipHTTPS)
+                {
+                    options.Filters.Add(new RequireHttpsAttribute());
+                }
+            });
+            services.AddScoped<IAuthorizationHandler, PostIsOwnerAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

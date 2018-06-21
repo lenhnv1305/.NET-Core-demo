@@ -9,34 +9,60 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using MVCApp.Models.PostViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Infrastructure.Models;
+using Microsoft.AspNetCore.Authorization;
+using MVCApp.Authorization;
 
 namespace MVCApp.Controllers
 {
+    [Authorize]
     [Route("[controller]/[action]")]
     public class PostController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAuthorizationService _authorizationService;
         private readonly IPostService _postService;
         private readonly ICategoryService _categoryService;
         private readonly IBlogImageService _blogImageService;
-        public PostController(IPostService postService, ICategoryService categoryService, IBlogImageService blogImageService)
+        public PostController(
+            IPostService postService, 
+            ICategoryService categoryService, 
+            IBlogImageService blogImageService, 
+            UserManager<ApplicationUser> userManager, 
+            IAuthorizationService authorizationService)
         {
             _postService = postService;
             _categoryService = categoryService;
             _blogImageService = blogImageService;
+            _userManager = userManager;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Create()
         {
-            return View("Modify", new PostViewModel() {
+            var isBloger = HttpContext.User.IsInRole(Constants.BlogerRole);
+            if (!isBloger)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View("Modify", new PostViewModel()
+            {
                 Categories = _categoryService.CategoriesSelectList()
             });
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Create(PostViewModel model, IFormCollection files, string returnUrl = null)
         {
-
+            var isBloger = HttpContext.User.IsInRole(Constants.BlogerRole);
+            if (!isBloger)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             byte[] bytes = new byte[] { };
             var fileName = "";
             if (Request.Form.Files[0] != null)
@@ -62,20 +88,27 @@ namespace MVCApp.Controllers
                         Content = model.Content,
                         ThumbnailImage = fileName + "__" + imageId,
                         CreatedDate = DateTime.UtcNow,
-                        UpdatedDate = DateTime.UtcNow
+                        UpdatedDate = DateTime.UtcNow,
+                        OwnerId = _userManager.GetUserId(HttpContext.User)
                     });
-                    _blogImageService.Insert(imageId , fileName, bytes);
+                    _blogImageService.Insert(imageId, fileName, bytes);
                 }
                 catch
                 {
                     throw;
-                }                
+                }
             }
             return RedirectToAction("GetPosts");
         }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Update(string id = "")
         {
+            var isBloger = HttpContext.User.IsInRole(Constants.BlogerRole);
+            if (!isBloger)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             var postViewModel = new PostViewModel();
             try
             {
@@ -95,13 +128,19 @@ namespace MVCApp.Controllers
             catch
             {
                 throw;
-            }            
+            }
             return View("Modify", postViewModel);
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Update(PostViewModel model, string returnUrl = null)
         {
+            var isBloger = HttpContext.User.IsInRole(Constants.BlogerRole);
+            if (!isBloger)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             byte[] bytes = new byte[] { };
             var fileName = "";
             if (Request.Form.Files[0] != null)
@@ -134,16 +173,25 @@ namespace MVCApp.Controllers
             return RedirectToAction("GetPosts");
         }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Delete(string id = "")
         {
+            var isBloger = HttpContext.User.IsInRole(Constants.BlogerRole);
+            if (!isBloger)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             _postService.Delete(id);
             return RedirectToAction("GetPosts");
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetPosts()
         {
-            return View("Post", _postService.Gets().Select(c => new PostViewModel
+            var isBloger = HttpContext.User.IsInRole(Constants.BlogerRole);
+            return View("Post", _postService.Gets(isBloger, _userManager.GetUserId(HttpContext.User))
+            .Select(c => new PostViewModel
             {
                 Id = c.Id,
                 CategoryId = c.CategoryId,
@@ -153,4 +201,12 @@ namespace MVCApp.Controllers
                 ThumbnailImage = null
             }));
         }
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Image(string id = "", string name = "")
+        {
+            var blogImage = _blogImageService.GetBlogIamge(id, name);
+            return File(blogImage.BinaryData, "image/jpeg");
+        }
+    }
 }

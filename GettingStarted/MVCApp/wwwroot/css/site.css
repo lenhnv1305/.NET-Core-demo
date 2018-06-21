@@ -65,15 +65,22 @@
 }
 
 .block-post {
-    padding: 8px 4px 25px 4px;
+    padding: 0 4px 25px 4px;
+    margin: 0 8px 15px 8px;
     border-bottom: solid 1px;
 }
 .block-post:last-of-type {
     border-bottom: none;
 }
+
 .post-content .post-header {
     width: 100%;
-    height: 150px;
+    height: 200px;
+}
+
+.post-content .post-header img {
+    max-height:100%;
+    max-width: 100%
 }
 
 .post-content .title {

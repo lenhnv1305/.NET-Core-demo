@@ -21,6 +21,8 @@ namespace Infrastructure.Models
         public string Content { get; set; }
         [StringLength(1024)]
         public string ThumbnailImage { get; set; }
+        [StringLength(256)]
+        public string OwnerId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public Category Category { get; set; }

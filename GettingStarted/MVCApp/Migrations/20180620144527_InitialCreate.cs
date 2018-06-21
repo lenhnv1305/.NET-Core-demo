@@ -190,6 +190,7 @@ namespace MVCApp.Migrations
                     CategoryId = table.Column<string>(maxLength: 256, nullable: true),
                     Content = table.Column<string>(maxLength: 4000, nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
+                    OwnerId = table.Column<string>(maxLength: 256, nullable: true),
                     ShortDescription = table.Column<string>(maxLength: 4000, nullable: true),
                     ThumbnailImage = table.Column<string>(maxLength: 1024, nullable: true),
                     Title = table.Column<string>(maxLength: 1024, nullable: true),

@@ -11,7 +11,7 @@ using System;
 namespace MVCApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180616085328_InitialCreate")]
+    [Migration("20180620144527_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,6 +123,9 @@ namespace MVCApp.Migrations
                         .HasMaxLength(4000);
 
                     b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("OwnerId")
+                        .HasMaxLength(256);
 
                     b.Property<string>("ShortDescription")
                         .HasMaxLength(4000);

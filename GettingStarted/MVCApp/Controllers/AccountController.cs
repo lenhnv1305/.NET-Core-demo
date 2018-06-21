@@ -5,7 +5,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Core.Interfaces;
 using Infrastructure.Models;
-using Infrastructure.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -25,12 +24,14 @@ namespace MVCApp.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
@@ -38,6 +39,7 @@ namespace MVCApp.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _roleManager = roleManager;
         }
 
         [TempData]
@@ -233,6 +235,8 @@ namespace MVCApp.Controllers
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     //await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
+
+                    EnsureRole(user.Id, Authorization.Constants.BlogerRole);
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToLocal(returnUrl);
@@ -243,7 +247,21 @@ namespace MVCApp.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+        private IdentityResult EnsureRole(string uid, string role)
+        {
+            IdentityResult IR = null;
 
+            if (!(_roleManager.RoleExistsAsync(role).Result))
+            {
+                IR = _roleManager.CreateAsync(new IdentityRole(role)).Result;
+            }
+
+            var user = _userManager.FindByIdAsync(uid);
+
+            IR = _userManager.AddToRoleAsync(user.Result, role).Result;
+
+            return IR;
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()

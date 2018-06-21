@@ -27,7 +27,8 @@ namespace Infrastructure.Services
                 Content = entity.Content,
                 ThumbnailImage = entity.ThumbnailImage,
                 CreatedDate = DateTime.UtcNow,
-                UpdatedDate = DateTime.UtcNow
+                UpdatedDate = DateTime.UtcNow,
+                OwnerId = entity.OwnerId
             });
         }
 
@@ -54,9 +55,13 @@ namespace Infrastructure.Services
             return returnEntity;
         }
 
-        public IEnumerable<PostDto> Gets()
+        public IEnumerable<PostDto> Gets(bool isBloger, string ownerId)
         {
             var entities = this._repo.Gets();
+            if (isBloger)
+            {
+                entities = entities.Where(x => x.OwnerId == ownerId);
+            }
             var returnEntities = new List<PostDto>();
             if(entities != null)
             {

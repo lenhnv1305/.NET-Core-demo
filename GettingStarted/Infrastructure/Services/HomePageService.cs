@@ -14,9 +14,9 @@ namespace Infrastructure.Services
         {
             _postService = postService;
         }
-        public IEnumerable<PostDto> FilterPostByCategoryId(string categoryId)
+        public IEnumerable<PostDto> FilterPostByCategoryId(string categoryId, bool isBloger, string ownerId)
         {
-            var query = _postService.Gets();
+            var query = _postService.Gets(isBloger, ownerId);
             if (!string.IsNullOrEmpty(categoryId))
             {
                 query = query.Where(x => x.CategoryId == categoryId);
