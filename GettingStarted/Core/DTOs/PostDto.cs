@@ -23,6 +23,8 @@ namespace Core.DTOs
         public DateTime UpdatedDate { get; set; }
         [StringLength(256)]
         public string OwnerId { get; set; }
+        [StringLength(512)]
+        public string Slug { get; set; }
 
         public string ImageId
         {

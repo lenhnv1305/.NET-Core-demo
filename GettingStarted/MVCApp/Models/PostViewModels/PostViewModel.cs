@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using MVCApp.Extensions;
 
 namespace MVCApp.Models.PostViewModels
 {
@@ -35,6 +36,8 @@ namespace MVCApp.Models.PostViewModels
 
         [StringLength(256)]
         public string OwnerId { get; set; }
+        [StringLength(512)]
+        public string Slug { get; set; }
         public string ImageId
         {
             get

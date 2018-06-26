@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using MVCApp.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace MVCApp
 {
@@ -34,7 +35,7 @@ namespace MVCApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), migration => migration.MigrationsAssembly("MVCApp")));
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"), migration => migration.MigrationsAssembly("MVCApp")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -69,7 +70,7 @@ namespace MVCApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -88,6 +89,10 @@ namespace MVCApp
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "blog", 
+                    template: "blog/{*postdetail}",
+                    defaults: new { controller = "Home", action = "PostDetail" });
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

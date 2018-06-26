@@ -10,6 +10,7 @@ using MVCApp.Models;
 using MVCApp.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.Models;
+using MVCApp.Models.PostViewModels;
 
 namespace MVCApp.Controllers
 {
@@ -30,7 +31,6 @@ namespace MVCApp.Controllers
         [AllowAnonymous]
         public IActionResult Index(string categoryId = "")
         {
-            var isBloger = HttpContext.User.IsInRole(Constants.BlogerRole);
             var homepageViewModel = new HomePageViewModel()
             {
                 Categories = _categoryService.Gets().Select(c => new  Models.CategoryViewModels.CategoryViewModel
@@ -39,8 +39,8 @@ namespace MVCApp.Controllers
                     Description = c.Description,
                     Name = c.Name
                 }).ToList(),
-                Posts = _homePageService.FilterPostByCategoryId(categoryId, isBloger, _userManager.GetUserId(HttpContext.User))
-                .Select(p => new Models.PostViewModels.PostViewModel
+                Posts = _homePageService.FilterPostByCategoryId(categoryId, _userManager.GetUserId(HttpContext.User))
+                .Select(p => new PostViewModel
                 {
                     CategoryId = p.CategoryId,
                     Id = p.Id,
@@ -49,12 +49,38 @@ namespace MVCApp.Controllers
                     ShortDescription = p.ShortDescription,
                     ThumbnailImage = p.ThumbnailImage,
                     Title = p.Title,
-                    UpdatedDate = p.UpdatedDate
+                    UpdatedDate = p.UpdatedDate,
+                    Slug = p.Slug
                 }).ToList()
             };
             return View(homepageViewModel);
         }
 
+        [AllowAnonymous]
+        public IActionResult PostDetail(string slug = "")
+        {
+            if (Request.Path.HasValue && Request.Path.Value.Split("/").Length > 2)
+            {
+                slug = Request.Path.Value.Split("/")[2];
+            }
+            var postDto = _homePageService.GetPost(slug);
+            var postViewModel = new PostViewModel();
+            if (postDto != null)
+            {
+                postViewModel.CategoryId = postDto.CategoryId;
+                postViewModel.Content = postDto.Content;
+                postViewModel.Id = postDto.Id;
+                postViewModel.OwnerId = postDto.OwnerId;
+                postViewModel.ShortDescription = postDto.ShortDescription;
+                postViewModel.ThumbnailImage = postDto.ThumbnailImage;
+                postViewModel.Title = postDto.Title;
+                postViewModel.UpdatedDate = postDto.UpdatedDate;
+                postViewModel.CreatedDate = postDto.CreatedDate;
+            }
+            return View("PostDetail", postViewModel);
+        }
+
+        [AllowAnonymous]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

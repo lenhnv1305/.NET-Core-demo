@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Models;
-using Infrastructure.Models;
 
 namespace Infrastructure.Data
 {
@@ -14,6 +13,10 @@ namespace Infrastructure.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite("Data Source=blogengine.db");
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

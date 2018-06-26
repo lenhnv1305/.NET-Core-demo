@@ -192,6 +192,7 @@ namespace MVCApp.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     OwnerId = table.Column<string>(maxLength: 256, nullable: true),
                     ShortDescription = table.Column<string>(maxLength: 4000, nullable: true),
+                    Slug = table.Column<string>(maxLength: 512, nullable: true),
                     ThumbnailImage = table.Column<string>(maxLength: 1024, nullable: true),
                     Title = table.Column<string>(maxLength: 1024, nullable: true),
                     UpdatedDate = table.Column<DateTime>(nullable: false)

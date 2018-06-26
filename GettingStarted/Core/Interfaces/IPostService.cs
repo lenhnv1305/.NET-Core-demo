@@ -9,7 +9,7 @@ namespace Core.Interfaces
     public interface IPostService
     {
         PostDto GetById(string id);
-        IEnumerable<PostDto> Gets(bool isBloger, string ownerId);
+        IEnumerable<PostDto> Gets(bool isBloger = false, string ownerId = "", string postId = "", string slug = "");
         void Create(PostDto entity);
         void Update(PostDto entity);
         void Delete(string id);

@@ -14,14 +14,19 @@ namespace Infrastructure.Services
         {
             _postService = postService;
         }
-        public IEnumerable<PostDto> FilterPostByCategoryId(string categoryId, bool isBloger, string ownerId)
+        public IEnumerable<PostDto> FilterPostByCategoryId(string categoryId, string ownerId)
         {
-            var query = _postService.Gets(isBloger, ownerId);
+            var query = _postService.Gets();
             if (!string.IsNullOrEmpty(categoryId))
             {
                 query = query.Where(x => x.CategoryId == categoryId);
             }
             return query.ToList();
+        }
+
+        public PostDto GetPost(string slug)
+        {
+            return _postService.Gets(slug: slug).FirstOrDefault();
         }
     }
 }

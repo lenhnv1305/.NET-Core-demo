@@ -86,3 +86,28 @@
 .post-content .title {
     font-size: 2em;
 }
+
+/* Post Title */
+.title-container {
+    font-size: 2em;
+    font-weight: bold;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+/* Post Detail */
+.created-date-container {
+    font-style: italic;
+    padding-left: 20%;
+}
+.row .content-container {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+.post-detail .post-title {
+    padding: 3em 1em 3em 1em;
+    text-align: center;
+}
+.content {
+    margin-left: 1em;
+}
+

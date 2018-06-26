@@ -28,7 +28,8 @@ namespace Infrastructure.Services
                 ThumbnailImage = entity.ThumbnailImage,
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
-                OwnerId = entity.OwnerId
+                OwnerId = entity.OwnerId,
+                Slug = entity.Slug
             });
         }
 
@@ -51,16 +52,26 @@ namespace Infrastructure.Services
                 returnEntity.Title = entity.Title;
                 returnEntity.UpdatedDate = entity.UpdatedDate;
                 returnEntity.CreatedDate = entity.CreatedDate;
+                returnEntity.Slug = entity.Slug;
             }
             return returnEntity;
         }
 
-        public IEnumerable<PostDto> Gets(bool isBloger, string ownerId)
+        public IEnumerable<PostDto> Gets(bool isBloger = false, string ownerId = "", string postId = "", string slug = "")
         {
             var entities = this._repo.Gets();
             if (isBloger)
             {
                 entities = entities.Where(x => x.OwnerId == ownerId);
+            }
+            if (!string.IsNullOrEmpty(postId))
+            {
+                entities = entities.Where(x => x.Id == postId);
+            }
+
+            if (!string.IsNullOrEmpty(slug))
+            {
+                entities = entities.Where(x => x.Slug.ToLower() == slug.ToLower());
             }
             var returnEntities = new List<PostDto>();
             if(entities != null)
@@ -76,7 +87,8 @@ namespace Infrastructure.Services
                         ThumbnailImage = item.ThumbnailImage,
                         Title = item.Title,
                         UpdatedDate = item.UpdatedDate,
-                        CreatedDate = item.CreatedDate
+                        CreatedDate = item.CreatedDate,
+                        Slug = item.Slug
                     });
                 }
             }

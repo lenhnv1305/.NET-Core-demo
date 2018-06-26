@@ -24,10 +24,19 @@
             </div>
             <div class="post-body">
                 <div>
-                    <span class="title">@item.Title</span>
+                    <a href="/blog/@item.Slug">
+                        <span class="title">@item.Title</span>
+                    </a>
                 </div>
                 <div>
                     <span class="description">@item.ShortDescription</span>
+                </div>
+                <div>
+                    <span class="">@item.CreatedDate.ToString()</span>
+                    <div class="fb-share-button" 
+                         data-href="https://localhost:44329/blog/@item.Slug" 
+                         data-layout="button_count" 
+                         data-size="small" data-mobile-iframe="true"></div>
                 </div>
             </div>
         </div>

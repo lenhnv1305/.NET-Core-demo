@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
 using MVCApp.Authorization;
+using MVCApp.Extensions;
 
 namespace MVCApp.Controllers
 {
@@ -89,7 +90,8 @@ namespace MVCApp.Controllers
                         ThumbnailImage = fileName + "__" + imageId,
                         CreatedDate = DateTime.UtcNow,
                         UpdatedDate = DateTime.UtcNow,
-                        OwnerId = _userManager.GetUserId(HttpContext.User)
+                        OwnerId = _userManager.GetUserId(HttpContext.User),
+                        Slug = StringHelper.UrlFriendly(model.Title)
                     });
                     _blogImageService.Insert(imageId, fileName, bytes);
                 }
@@ -123,6 +125,7 @@ namespace MVCApp.Controllers
                     postViewModel.Content = post.Content;
                     postViewModel.ThumbnailImage = post.ThumbnailImage;
                     postViewModel.Categories = _categoryService.CategoriesSelectList(id);
+                    postViewModel.Slug = post.Slug;
                 }
             }
             catch
@@ -198,8 +201,9 @@ namespace MVCApp.Controllers
                 Title = c.Title,
                 ShortDescription = c.ShortDescription,
                 Content = c.Content,
-                ThumbnailImage = null
-            }));
+                ThumbnailImage = c.ThumbnailImage,
+                Slug = c.Slug
+            }).OrderByDescending(x => x.CreatedDate));
         }
         [HttpGet]
         [AllowAnonymous]

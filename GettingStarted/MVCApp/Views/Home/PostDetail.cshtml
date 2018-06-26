@@ -1,0 +1,25 @@
+﻿@model MVCApp.Models.PostViewModels.PostViewModel
+@{
+    ViewData["Title"] = "Post Detail";
+}
+<div class="post-detail">
+    <div class="panel panel-info row">
+        <div class="panel-heading post-title">
+            <div class="title-container">@Model.Title</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="created-date-container">
+            @Model.CreatedDate.ToString()
+            <div class="fb-share-button"
+                 data-href="https://localhost:44329/blog/@Model.Slug"
+                 data-layout="button_count"
+                 data-size="small" data-mobile-iframe="true"></div>
+        </div><br/>
+        <div class="row content-container">
+            <div class="content">
+                @Html.Raw(Model.Content)
+            </div>
+        </div>
+    </div>
+</div>

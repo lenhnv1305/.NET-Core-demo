@@ -129,6 +129,9 @@ namespace MVCApp.Migrations
                     b.Property<string>("ShortDescription")
                         .HasMaxLength(4000);
 
+                    b.Property<string>("Slug")
+                        .HasMaxLength(512);
+
                     b.Property<string>("ThumbnailImage")
                         .HasMaxLength(1024);
 

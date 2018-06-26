@@ -26,5 +26,8 @@ namespace Infrastructure.Models
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public Category Category { get; set; }
+
+        [StringLength(512)]
+        public string Slug { get; set; }
     }
 }
