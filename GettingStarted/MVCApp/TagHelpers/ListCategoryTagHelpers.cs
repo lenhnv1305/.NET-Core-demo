@@ -15,7 +15,7 @@ namespace MVCApp.TagHelpers
         public List<CategoryViewModel> Categories { get; set; }
         public string UpdateUrl { get; set; }
         public string DeleteUrl { get; set; }
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             base.Process(context, output);
             output.TagName = "table";

@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Core.Interfaces
 {
     public interface IHomePageService
     {
-        IEnumerable<PostDto> FilterPostByCategoryId(string categoryId, string ownerId);
-        PostDto GetPost(string slug);
+        Task<IEnumerable<PostDto>> FilterPostByCategoryId(string categoryId, string ownerId);
+        Task<PostDto> GetPost(string slug);
     }
 }

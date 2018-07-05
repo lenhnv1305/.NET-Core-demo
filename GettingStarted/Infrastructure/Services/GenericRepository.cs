@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Core.Interfaces;
 using Infrastructure.Data;
 
@@ -12,32 +13,32 @@ namespace Infrastructure.Services
         {
             _context = context;
         }
-        public T GetById(string id)
+        public async Task<T> GetById(string id)
         {
-            return _context.Find<T>(id);
+            return await _context.FindAsync<T>(id);
         }
 
-        public IEnumerable<T> Gets()
+        public async Task<IEnumerable<T>> Gets()
         {
             return _context.Set<T>();
         }
 
-        public void Create(T entity)
+        public async Task Create(T entity)
         {
-            _context.Set<T>().Add(entity);
-            _context.SaveChanges();
+            await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
         
-        public void Update(T entity)
+        public async Task Update(T entity)
         {
             _context.Entry<T>(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(T entity)
+        public async Task Delete(T entity)
         {
             _context.Set<T>().Remove(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

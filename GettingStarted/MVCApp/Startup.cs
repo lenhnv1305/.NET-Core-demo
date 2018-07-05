@@ -11,12 +11,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Infrastructure.Models;
 using Core.Interfaces;
 using Infrastructure.Data;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using MVCApp.Authorization;
 using Microsoft.Extensions.Logging;
+using StructureMap;
+using Infrastructure.Services;
 
 namespace MVCApp
 {

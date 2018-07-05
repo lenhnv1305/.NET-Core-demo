@@ -42,7 +42,7 @@ namespace MVCApp.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             var isBloger = HttpContext.User.IsInRole(Constants.BlogerRole);
             if (!isBloger)
@@ -51,7 +51,7 @@ namespace MVCApp.Controllers
             }
             return View("Modify", new PostViewModel()
             {
-                Categories = _categoryService.CategoriesSelectList()
+                Categories = await _categoryService.CategoriesSelectList()
             });
         }
 
@@ -104,7 +104,7 @@ namespace MVCApp.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Update(string id = "")
+        public async Task<IActionResult> Update(string id = "")
         {
             var isBloger = HttpContext.User.IsInRole(Constants.BlogerRole);
             if (!isBloger)
@@ -114,7 +114,7 @@ namespace MVCApp.Controllers
             var postViewModel = new PostViewModel();
             try
             {
-                var post = _postService.GetById(id);
+                var post = await _postService.GetById(id);
                 if (post != null)
                 {
                     postViewModel.Id = post.Id;
@@ -124,7 +124,7 @@ namespace MVCApp.Controllers
                     postViewModel.CategoryId = post.CategoryId;
                     postViewModel.Content = post.Content;
                     postViewModel.ThumbnailImage = post.ThumbnailImage;
-                    postViewModel.Categories = _categoryService.CategoriesSelectList(id);
+                    postViewModel.Categories = await _categoryService.CategoriesSelectList(id);
                     postViewModel.Slug = post.Slug;
                 }
             }
@@ -137,7 +137,7 @@ namespace MVCApp.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Update(PostViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Update(PostViewModel model, string returnUrl = null)
         {
             var isBloger = HttpContext.User.IsInRole(Constants.BlogerRole);
             if (!isBloger)
@@ -158,7 +158,7 @@ namespace MVCApp.Controllers
             if (ModelState.IsValid)
             {
                 var imageId = Guid.NewGuid().ToString();
-                var post = _postService.GetById(model.Id);
+                var post = await _postService.GetById(model.Id);
                 if (post != null)
                 {
                     post.CategoryId = model.CategoryId;
@@ -168,9 +168,9 @@ namespace MVCApp.Controllers
                     post.ThumbnailImage = fileName + "__" + imageId;
                     post.UpdatedDate = DateTime.UtcNow;
                 }
-                _postService.Update(post);
-                _blogImageService.Delete(post.ImageId);
-                _blogImageService.Insert(imageId, fileName, bytes);
+                await _postService.Update(post);
+                await _blogImageService.Delete(post.ImageId);
+                await _blogImageService.Insert(imageId, fileName, bytes);
             }
 
             return RedirectToAction("GetPosts");
@@ -190,10 +190,10 @@ namespace MVCApp.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult GetPosts()
+        public async Task<IActionResult> GetPosts()
         {
             var isBloger = HttpContext.User.IsInRole(Constants.BlogerRole);
-            return View("Post", _postService.Gets(isBloger, _userManager.GetUserId(HttpContext.User))
+            return View("Post", (await _postService.Gets(isBloger, _userManager.GetUserId(HttpContext.User)))
             .Select(c => new PostViewModel
             {
                 Id = c.Id,
@@ -207,9 +207,9 @@ namespace MVCApp.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Image(string id = "", string name = "")
+        public async Task<IActionResult> Image(string id = "", string name = "")
         {
-            var blogImage = _blogImageService.GetBlogIamge(id, name);
+            var blogImage = await _blogImageService.GetBlogIamge(id, name);
             return File(blogImage.BinaryData, "image/jpeg");
         }
     }

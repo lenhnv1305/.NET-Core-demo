@@ -15,15 +15,15 @@ namespace Tests
 {
     public class CategoryControllerTest
     {
-        private readonly ICategoryService _categoryService;
         public CategoryControllerTest()
         {
         }
         [Fact]
         public void GetCategories_ReturnActionResult()
         {
+            //Arrange
             var mockRepo = new Mock<ICategoryService>();
-            mockRepo.Setup(repo => repo.Gets()).Returns(GetCategoryTest());
+            mockRepo.Setup(repo => repo.Gets()).Returns(Task.FromResult(GetCategoryTest()).Result);
             var controller = new CategoryController(mockRepo.Object);
 
             // Act
@@ -34,10 +34,35 @@ namespace Tests
             var model = Assert.IsAssignableFrom<IEnumerable<CategoryViewModel>>(
                 viewResult.ViewData.Model);
             Assert.Equal(2, model.Count());
+            Assert.Equal("01", model.FirstOrDefault().CategoryId);
+            Assert.Equal("02", model.LastOrDefault().CategoryId);
         }
-        private List<CategoryDto> GetCategoryTest()
+
+        [Fact]
+        public void UpdateCategory_ReturnActionResult()
         {
-            return new List<CategoryDto>() { new CategoryDto { Id = "01" }, new CategoryDto { Id = "02" } };
+            //Arrange
+            var mockRepo = new Mock<ICategoryService>();
+            var category = new CategoryDto { Description = "Description", Name = "Name" };
+            var categoryViewModel = new CategoryViewModel { Description = "Description", Name = "Name" };
+            mockRepo.Setup(repo => repo.Update(category));
+            var controller = new CategoryController(mockRepo.Object);
+
+            // Act
+            var result = controller.Update(model: categoryViewModel);
+
+            // Assert
+            var viewResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("GetCategories", viewResult.ActionName);
+            Assert.Null(viewResult.ControllerName);
+        }
+        private async Task<IEnumerable<CategoryDto>> GetCategoryTest()
+        {
+            return new List<CategoryDto>()
+            {
+                new CategoryDto { Id = "01" },
+                new CategoryDto { Id = "02" }
+            };
         }
     }
 }

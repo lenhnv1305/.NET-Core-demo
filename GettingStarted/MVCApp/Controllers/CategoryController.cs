@@ -57,16 +57,16 @@ namespace MVCApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(string categoryId = "")
+        public async Task<IActionResult> Delete(string categoryId = "")
         {            
-            _categoryService.Delete(categoryId);
+            await _categoryService.Delete(categoryId);
             return RedirectToAction("GetCategories");
         }
 
         [HttpGet]
-        public IActionResult GetCategories()
+        public async Task<IActionResult> GetCategories()
         {
-            return View("Category", _categoryService.Gets().Select(c => new CategoryViewModel {
+            return View("Category", (await _categoryService.Gets()).Select(c => new CategoryViewModel {
                 CategoryId = c.Id,
                 Name = c.Name,
                 Description = c.Description

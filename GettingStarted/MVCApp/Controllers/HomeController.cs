@@ -29,17 +29,17 @@ namespace MVCApp.Controllers
             _userManager = userManager;
         }
         [AllowAnonymous]
-        public IActionResult Index(string categoryId = "")
+        public async Task<IActionResult> Index(string categoryId = "")
         {
             var homepageViewModel = new HomePageViewModel()
             {
-                Categories = _categoryService.Gets().Select(c => new  Models.CategoryViewModels.CategoryViewModel
+                Categories = (await _categoryService.Gets()).Select(c => new  Models.CategoryViewModels.CategoryViewModel
                 {
                     CategoryId = c.Id,
                     Description = c.Description,
                     Name = c.Name
                 }).ToList(),
-                Posts = _homePageService.FilterPostByCategoryId(categoryId, _userManager.GetUserId(HttpContext.User))
+                Posts = (await _homePageService.FilterPostByCategoryId(categoryId, _userManager.GetUserId(HttpContext.User)))
                 .Select(p => new PostViewModel
                 {
                     CategoryId = p.CategoryId,
@@ -57,13 +57,13 @@ namespace MVCApp.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult PostDetail(string slug = "")
+        public async Task<IActionResult> PostDetail(string slug = "")
         {
             if (Request.Path.HasValue && Request.Path.Value.Split("/").Length > 2)
             {
                 slug = Request.Path.Value.Split("/")[2];
             }
-            var postDto = _homePageService.GetPost(slug);
+            var postDto = await _homePageService.GetPost(slug);
             var postViewModel = new PostViewModel();
             if (postDto != null)
             {

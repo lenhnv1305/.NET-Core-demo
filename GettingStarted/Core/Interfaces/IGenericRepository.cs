@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Core.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {
-        T GetById(string id);
-        IEnumerable<T> Gets();
-        void Create(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        Task<T> GetById(string id);
+        Task<IEnumerable<T>> Gets();
+        Task Create(T entity);
+        Task Update(T entity);
+        Task Delete(T entity);
     }
 }

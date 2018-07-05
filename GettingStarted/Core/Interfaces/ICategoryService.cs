@@ -9,11 +9,11 @@ namespace Core.Interfaces
 {
     public interface ICategoryService
     {
-        CategoryDto GetById(string id);
-        IEnumerable<CategoryDto> Gets();
-        void Create(CategoryDto entity);
-        void Update(CategoryDto entity);
-        void Delete(string id);
-        List<SelectListItem> CategoriesSelectList(string id = "");
+        Task<CategoryDto> GetById(string id);
+        Task<IEnumerable<CategoryDto>> Gets();
+        Task<string> Create(CategoryDto entity);
+        Task<string> Update(CategoryDto entity);
+        Task<string> Delete(string id);
+        Task<List<SelectListItem>> CategoriesSelectList(string id = "");
     }
 }

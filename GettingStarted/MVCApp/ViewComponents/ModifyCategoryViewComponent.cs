@@ -15,9 +15,9 @@ namespace MVCApp.ViewComponents
         {
             this._categoryService = categoryService;
         }
-        public IViewComponentResult Invoke(string id = "")
+        public async Task<IViewComponentResult> InvokeAsync(string id = "")
         {
-            var category = _categoryService.GetById(id);
+            var category = await _categoryService.GetById(id);
             var categoryViewModel = new CategoryViewModel();
             if (category != null)
             {                

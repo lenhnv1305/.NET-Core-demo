@@ -17,9 +17,9 @@ namespace CDN.Controllers
         }
 
         [HttpGet]
-        public IActionResult Image(string id = "", string name ="")
+        public async Task<IActionResult> Image(string id = "", string name ="")
         {
-            var blogImage = _blogImageService.GetBlogIamge(id, name);
+            var blogImage = await _blogImageService.GetBlogIamge(id, name);
             return File(blogImage.BinaryData, "image/jpeg");
         }
 

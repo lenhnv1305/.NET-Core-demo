@@ -12,27 +12,37 @@ namespace Infrastructure.Services
     public class CategoryService : ICategoryService
     {
         private readonly IGenericRepository<Category> _repo;
+
         public CategoryService(IGenericRepository<Category> repo)
         {
             this._repo = repo;
         }
-        public void Create(CategoryDto entity)
+
+        public async Task<string> Create(CategoryDto entity)
         {
-            this._repo.Create(new Category() {
-                Id = Guid.NewGuid().ToString(),
+            var newGuidId = Guid.NewGuid().ToString();
+            await this._repo.Create(new Category() {
+                Id = newGuidId,
                 Description = entity.Description,
                 Name = entity.Name
             });
+            return newGuidId;
         }
 
-        public void Delete(string id)
-        {            
-            this._repo.Delete(this._repo.GetById(id));
-        }
-
-        public CategoryDto GetById(string id)
+        public async Task<string> Delete(string id)
         {
-            var entity = this._repo.GetById(id);
+            var category = await this._repo.GetById(id);
+            if (category != null)
+            {
+                await this._repo.Delete(category);
+                return category.Id;
+            }
+            return string.Empty;
+        }
+
+        public async Task<CategoryDto> GetById(string id)
+        {
+            var entity = await this._repo.GetById(id);
             var returnEntity = new CategoryDto();
             if (entity != null)
             {
@@ -43,9 +53,9 @@ namespace Infrastructure.Services
             return returnEntity;
         }
 
-        public IEnumerable<CategoryDto> Gets()
+        public async Task<IEnumerable<CategoryDto>> Gets()
         {
-            var entities = this._repo.Gets();
+            var entities = await this._repo.Gets();
             var returnEntities = new List<CategoryDto>();
             if (entities != null)
             {
@@ -62,19 +72,21 @@ namespace Infrastructure.Services
             return returnEntities;
         }
 
-        public void Update(CategoryDto entity)
+        public async Task<string> Update(CategoryDto entity)
         {
-            var category = this._repo.GetById(entity.Id);
+            var category = await this._repo.GetById(entity.Id);
             if (category != null)
             {
                 category.Name = entity.Name;
                 category.Description = entity.Description;
                 this._repo.Update(category);
+                return category.Id;
             }
+            return string.Empty;
         }
-        public List<SelectListItem> CategoriesSelectList(string id = "")
+        public async Task<List<SelectListItem>> CategoriesSelectList(string id = "")
         {
-            var categories = this._repo.Gets();
+            var categories = await this._repo.Gets();
             var categorySelectList = new List<SelectListItem>();
             if (categories != null)
             {

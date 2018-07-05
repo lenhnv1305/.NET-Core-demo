@@ -8,10 +8,10 @@ namespace Core.Interfaces
 {
     public interface IPostService
     {
-        PostDto GetById(string id);
-        IEnumerable<PostDto> Gets(bool isBloger = false, string ownerId = "", string postId = "", string slug = "");
-        void Create(PostDto entity);
-        void Update(PostDto entity);
-        void Delete(string id);
+        Task<PostDto> GetById(string id);
+        Task<IEnumerable<PostDto>> Gets(bool isBloger = false, string ownerId = "", string postId = "", string slug = "");
+        Task Create(PostDto entity);
+        Task Update(PostDto entity);
+        Task Delete(string id);
     }
 }

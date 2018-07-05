@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
@@ -16,18 +17,18 @@ namespace Infrastructure.Services
             _repo = repo;
         }
 
-        public void Delete(string id)
+        public async Task Delete(string id)
         {
-            var image = _repo.GetById(id);
+            var image = await _repo.GetById(id);
             if (image != null)
             {
-                this._repo.Delete(image);
+                await this._repo.Delete(image);
             }
         }
 
-        public BlogImageDto GetBlogIamge(string id = "", string name = "")
+        public async Task<BlogImageDto> GetBlogIamge(string id = "", string name = "")
         {
-            var blogImage = _repo.Gets().Where(c => c.Id == id || c.Name.ToLower().Contains(name.ToLower())).FirstOrDefault();
+            var blogImage = (await _repo.Gets()).Where(c => c.Id == id || c.Name.ToLower().Contains(name.ToLower())).FirstOrDefault();
             var returnBlogImage = new BlogImageDto();
             if (blogImage != null)
             {
@@ -39,9 +40,9 @@ namespace Infrastructure.Services
             return returnBlogImage;
         }
 
-        public BlogImageDto Insert(string id, string name, byte[] fileData)
+        public async Task<BlogImageDto> Insert(string id, string name, byte[] fileData)
         {
-            _repo.Create(new BlogImage
+            await _repo.Create(new BlogImage
             {
                 Id = id,
                 Name = name,

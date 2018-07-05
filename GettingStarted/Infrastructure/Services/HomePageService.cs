@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
@@ -14,9 +15,9 @@ namespace Infrastructure.Services
         {
             _postService = postService;
         }
-        public IEnumerable<PostDto> FilterPostByCategoryId(string categoryId, string ownerId)
+        public async Task<IEnumerable<PostDto>> FilterPostByCategoryId(string categoryId, string ownerId)
         {
-            var query = _postService.Gets();
+            var query = await _postService.Gets();
             if (!string.IsNullOrEmpty(categoryId))
             {
                 query = query.Where(x => x.CategoryId == categoryId);
@@ -24,9 +25,9 @@ namespace Infrastructure.Services
             return query.ToList();
         }
 
-        public PostDto GetPost(string slug)
+        public async Task<PostDto> GetPost(string slug)
         {
-            return _postService.Gets(slug: slug).FirstOrDefault();
+            return (await _postService.Gets(slug: slug)).FirstOrDefault();
         }
     }
 }

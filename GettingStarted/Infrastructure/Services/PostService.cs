@@ -16,9 +16,9 @@ namespace Infrastructure.Services
             this._repo = repo;
         }
 
-        public void Create(PostDto entity)
+        public async Task Create(PostDto entity)
         {
-            this._repo.Create(new Post()
+            await this._repo.Create(new Post()
             {
                 Id = Guid.NewGuid().ToString(),
                 CategoryId = entity.CategoryId,
@@ -33,14 +33,14 @@ namespace Infrastructure.Services
             });
         }
 
-        public void Delete(string id)
+        public async Task Delete(string id)
         {
-            this._repo.Delete(this._repo.GetById(id));
+            await this._repo.Delete(await this._repo.GetById(id));
         }
 
-        public PostDto GetById(string id)
+        public async Task<PostDto> GetById(string id)
         {
-            var entity = this._repo.GetById(id);
+            var entity = await this._repo.GetById(id);
             var returnEntity = new PostDto();
             if (entity != null)
             {
@@ -57,9 +57,9 @@ namespace Infrastructure.Services
             return returnEntity;
         }
 
-        public IEnumerable<PostDto> Gets(bool isBloger = false, string ownerId = "", string postId = "", string slug = "")
+        public async Task<IEnumerable<PostDto>> Gets(bool isBloger = false, string ownerId = "", string postId = "", string slug = "")
         {
-            var entities = this._repo.Gets();
+            var entities = await this._repo.Gets();
             if (isBloger)
             {
                 entities = entities.Where(x => x.OwnerId == ownerId);
@@ -95,9 +95,9 @@ namespace Infrastructure.Services
             return returnEntities;
         }
 
-        public void Update(PostDto entity)
+        public async Task Update(PostDto entity)
         {
-            var post = this._repo.GetById(entity.Id);
+            var post = await this._repo.GetById(entity.Id);
             if (post != null)
             {
                 post.CategoryId = entity.CategoryId;
@@ -107,7 +107,7 @@ namespace Infrastructure.Services
                 post.ThumbnailImage = entity.ThumbnailImage;
                 post.UpdatedDate = DateTime.UtcNow;
             }
-            this._repo.Update(post);
+            await this._repo.Update(post);
         }
     }
 }
